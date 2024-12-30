@@ -3,17 +3,18 @@ import { Badge, Button, Table } from '@radix-ui/themes'
 import Link from 'next/link'
 import React from 'react'
 import BadgeComp from '../components/BadgeComp'
+import delay from 'delay'
+import IssueButton from './IssueButton'
 
 const page = async () => {
 
   const issues = await prisma.issue.findMany()
+
+  await delay(2000)
   return (
     <div className='ml-5'>
 
-      <div className='mb-5'>
-        <Button><Link href="/issues/new">Create new issue</Link></Button>
-      </div>
-    
+      <IssueButton/>
       <Table.Root variant='surface'>
         <Table.Header>
           <Table.Row>
@@ -25,7 +26,7 @@ const page = async () => {
 
         <Table.Body>
           {issues.map((issue) => (
-            <Table.Row key={issue.id}> {/* Add a unique key */}
+            <Table.Row key={issue.id}>
               <Table.Cell>{issue.title}
                 <div className='block md:hidden'>
                   <BadgeComp status={issue.status}></BadgeComp>
