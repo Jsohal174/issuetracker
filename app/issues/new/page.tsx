@@ -14,7 +14,7 @@ import ErrorMessage from "@/app/components/ErrorMessage";
 
 type Issueform = z.infer<typeof issueSchema>
 
-const page = () => {
+const Page = () => {
 
   // this will help us take the user back to the issue page
   const router = useRouter()
@@ -63,4 +63,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page
