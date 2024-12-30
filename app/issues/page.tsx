@@ -1,7 +1,8 @@
 import prisma from '@/prisma/client'
-import { Button, Table } from '@radix-ui/themes'
+import { Badge, Button, Table } from '@radix-ui/themes'
 import Link from 'next/link'
 import React from 'react'
+import BadgeComp from '../components/BadgeComp'
 
 const page = async () => {
 
@@ -27,10 +28,10 @@ const page = async () => {
             <Table.Row key={issue.id}> {/* Add a unique key */}
               <Table.Cell>{issue.title}
                 <div className='block md:hidden'>
-                  {issue.status}
+                  <BadgeComp status={issue.status}></BadgeComp>
                 </div>
               </Table.Cell>
-              <Table.Cell className='hidden md:table-cell'>{issue.status}</Table.Cell>
+              <Table.Cell className='hidden md:table-cell'><BadgeComp status={issue.status}></BadgeComp></Table.Cell>
               <Table.Cell className='hidden md:table-cell'>{issue.createdAt.toDateString()}</Table.Cell>
             </Table.Row>
           ))}
