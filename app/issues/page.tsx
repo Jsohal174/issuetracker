@@ -4,14 +4,12 @@ import NewLink from '../components/Link'
 import Link from 'next/link'
 import React from 'react'
 import BadgeComp from '../components/BadgeComp'
-import delay from 'delay'
 import IssueButton from './IssueButton'
 
 const page = async () => {
 
   const issues = await prisma.issue.findMany()
 
-  await delay(2000)
   return (
     <div className='ml-5'>
 

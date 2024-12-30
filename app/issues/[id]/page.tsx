@@ -3,15 +3,25 @@ import prisma from '@/prisma/client'
 import { Card, Heading, Text } from '@radix-ui/themes'
 import React from 'react'
 import ReactMarkdown from 'react-markdown'
+import delay from 'delay'
+
+interface Props {
+
+  params: {
+    id: string
+  }
+}
+
+const page = async ({ params}: Props) => {
 
 
+  await delay(2000)
 
-
-const page = async ({ params }: { params: { id: string }}) => {
+  const {id} = await params
 
   const issue  = await prisma.issue.findUnique({
     where: {
-      id:parseInt(params.id)
+      id: parseInt(id),
     }
   })
 
