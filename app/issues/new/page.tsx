@@ -1,6 +1,6 @@
 'use client'
-import SimpleMDE from "react-simplemde-editor";
-import { useForm, SubmitHandler, Controller } from "react-hook-form"
+import dynamic from "next/dynamic";
+import { useForm, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import "easymde/dist/easymde.min.css";
 import axios from "axios";
@@ -10,11 +10,18 @@ import { useRouter } from "next/navigation";
 import { issueSchema } from "@/app/validationSchemas";
 import {z} from 'zod'
 import ErrorMessage from "@/app/components/ErrorMessage";
+import delay from "delay";
 
 
 type Issueform = z.infer<typeof issueSchema>
 
+const SimpleMDE = dynamic( 
+  () => import('react-simplemde-editor'),
+  {ssr: false}
+)
+
 const Page = () => {
+
 
   // this will help us take the user back to the issue page
   const router = useRouter()

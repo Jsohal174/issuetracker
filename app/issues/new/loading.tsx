@@ -6,8 +6,7 @@ const loading = () => {
   return (
     <Box className='max-w-xl'>
       <Skeleton/>
-      <Skeleton height="20rem"/>
-      
+      <Skeleton height="20rem"/> 
     </Box>
   )
 }
