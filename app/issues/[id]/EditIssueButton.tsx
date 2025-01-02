@@ -7,9 +7,11 @@ import { MdEdit } from 'react-icons/md'
 const EditIssueButton = ({issueId}: {issueId: number}) => {
   return (
     <Button>
-        <MdEdit/>
-        Edit Issue
-        <Link href={`/issues/${issueId}/edit`}></Link>
+      <MdEdit/>
+      <Link href={`/issues/${issueId}/edit`}>
+        
+        Edit Issue 
+      </Link>   
     </Button>
   )
 }

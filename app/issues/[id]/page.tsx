@@ -6,6 +6,7 @@ import ReactMarkdown from 'react-markdown'
 import { MdEdit } from "react-icons/md";
 import EditIssueButton from './EditIssueButton'
 import IssueDetails from './IssueDetails'
+import { notFound } from 'next/navigation'
 
 interface Props {
 
@@ -14,9 +15,9 @@ interface Props {
   }
 }
 
-const page = async ({ params}: Props) => {
+const page = async ({params}: {params: Promise<{ id: string }>}) => {
 
-  const {id} = await params
+  const { id } = await params;
 
   const issue  = await prisma.issue.findUnique({
     where: {
@@ -24,15 +25,17 @@ const page = async ({ params}: Props) => {
     }
   })
 
+  if (!issue) notFound()
+
   return (
     <Grid columns={{initial:"1", md:"2"}} gap="3">
 
       <Box>
-        <IssueDetails issue={issue!}/>
+        <IssueDetails issue={issue}/>
       </Box>
 
       <Box>
-        <EditIssueButton issueId={parseInt(id)}/>
+        <EditIssueButton issueId={issue.id}/>
       </Box>
     </Grid>
   )

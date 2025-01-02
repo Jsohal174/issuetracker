@@ -1,0 +1,78 @@
+'use client'
+import ErrorMessage from "@/app/components/ErrorMessage";
+import { issueSchema } from "@/app/validationSchemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Issue } from "@prisma/client";
+import { Button, Callout, Spinner, TextField } from '@radix-ui/themes';
+import axios from "axios";
+import "easymde/dist/easymde.min.css";
+import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
+import { useState } from 'react';
+import { Controller, useForm } from "react-hook-form";
+import { z } from 'zod';
+
+
+type IssueformData = z.infer<typeof issueSchema>
+
+interface Props {
+  issue?: Issue
+}
+
+const SimpleMDE = dynamic( 
+  () => import('react-simplemde-editor'),
+  {ssr: false}
+)
+
+const IssueForm = ({issue}: Props) => {
+
+
+  // this will help us take the user back to the issue page
+  const router = useRouter()
+  const [error, setError] = useState('')
+  const [isSubmitted, setSubmitted] = useState(false)
+  // useForm is used to create a new react hook so that we can track data without complicated code
+  // for client side rendering we are using zod resolver check docs for more info to get back to later
+  // form state can grab a lot of stuff here we are only using errors 
+  const {register, control , handleSubmit, formState: { errors }} =  useForm<IssueformData>({resolver: zodResolver(issueSchema)},)
+
+  return (
+
+    <div className="max-w-96 space-y-3">
+      {error && <Callout.Root color="red"><Callout.Text>{error}</Callout.Text></Callout.Root>}
+      <form className='space-y-3' onSubmit={ handleSubmit(async (data)=> {
+
+        try {
+          setSubmitted(true)
+          await axios.post('/api/issues', data);
+          router.push('/issues')
+        } catch (error) {
+          // this error we catch we can use to understand the problem of the client and return it
+          setError('An unexpected error has occured')
+        }
+      })}>
+
+        {/* {...register('title') is the way of passing the name of thing we want to keep track of  */}
+        <TextField.Root defaultValue={issue?.title} placeholder='Title' radius='medium' {...register('title')}>
+        </TextField.Root>
+
+        {/* so if there is a error with the title we basically show it using Text which is radix component */}
+        {errors.title && <ErrorMessage>{errors.title.message}</ErrorMessage>}
+
+        {/* Since simple mde does not allow direct passing of {} we used a controller */}
+        <Controller
+          name="description"
+          defaultValue={issue?.description}
+          control={control}
+          render={({ field }) => <SimpleMDE placeholder='Description' {...field} />}
+        />
+
+        {errors.description && <ErrorMessage>{errors.description.message}</ErrorMessage>}
+
+        <Button disabled={isSubmitted}>Submit new issue {isSubmitted && <Spinner></Spinner>} </Button>
+      </form>
+    </div>
+  )
+}
+
+export default IssueForm
