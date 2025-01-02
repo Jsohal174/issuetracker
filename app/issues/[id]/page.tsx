@@ -4,6 +4,8 @@ import { Box, Button, Card, Grid, Heading, Text } from '@radix-ui/themes'
 import Link from 'next/link'
 import ReactMarkdown from 'react-markdown'
 import { MdEdit } from "react-icons/md";
+import EditIssueButton from './EditIssueButton'
+import IssueDetails from './IssueDetails'
 
 interface Props {
 
@@ -26,26 +28,11 @@ const page = async ({ params}: Props) => {
     <Grid columns={{initial:"1", md:"2"}} gap="3">
 
       <Box>
-        <Heading>{issue!.id}</Heading>
-
-        <div className='flex items-center space-x-3 my-3'>
-          <BadgeComp status={issue!.status}/>
-          <Text>{issue!.createdAt.toDateString()}</Text>
-        </div>
-      
-        <Card className='prose mt-3'>
-          <ReactMarkdown>
-            {issue!.description}
-          </ReactMarkdown>
-        </Card>
+        <IssueDetails issue={issue!}/>
       </Box>
 
       <Box>
-        <Button>
-          <MdEdit/>
-          Edit Issue
-          <Link href={`/issues/${id}/edit`}></Link>
-        </Button>
+        <EditIssueButton issueId={parseInt(id)}/>
       </Box>
     </Grid>
   )
