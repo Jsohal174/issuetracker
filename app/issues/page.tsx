@@ -1,9 +1,7 @@
 import prisma from '@/prisma/client'
-import {Table } from '@radix-ui/themes'
-import NewLink from '../components/Link'
-import Link from 'next/link'
-import React from 'react'
+import { Table } from '@radix-ui/themes'
 import BadgeComp from '../components/BadgeComp'
+import NewLink from '../components/Link'
 import IssueButton from './IssueButton'
 
 const page = async () => {

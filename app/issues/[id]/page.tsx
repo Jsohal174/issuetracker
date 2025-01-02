@@ -1,9 +1,9 @@
 import BadgeComp from '@/app/components/BadgeComp'
 import prisma from '@/prisma/client'
-import { Card, Heading, Text } from '@radix-ui/themes'
-import React from 'react'
+import { Box, Button, Card, Grid, Heading, Text } from '@radix-ui/themes'
+import Link from 'next/link'
 import ReactMarkdown from 'react-markdown'
-import delay from 'delay'
+import { MdEdit } from "react-icons/md";
 
 interface Props {
 
@@ -14,9 +14,6 @@ interface Props {
 
 const page = async ({ params}: Props) => {
 
-
-  await delay(2000)
-
   const {id} = await params
 
   const issue  = await prisma.issue.findUnique({
@@ -26,21 +23,31 @@ const page = async ({ params}: Props) => {
   })
 
   return (
-    <div>
-      <Heading>{issue!.id}</Heading>
+    <Grid columns={{initial:"1", md:"2"}} gap="3">
 
-      <div className='flex items-center space-x-3 my-3'>
-        <BadgeComp status={issue!.status}/>
-        <Text>{issue!.createdAt.toDateString()}</Text>
-      </div>
-     
-      <Card className='prose mt-3'>
-        <ReactMarkdown>
-          {issue!.description}
-        </ReactMarkdown>
-      </Card>
+      <Box>
+        <Heading>{issue!.id}</Heading>
+
+        <div className='flex items-center space-x-3 my-3'>
+          <BadgeComp status={issue!.status}/>
+          <Text>{issue!.createdAt.toDateString()}</Text>
+        </div>
       
-    </div>
+        <Card className='prose mt-3'>
+          <ReactMarkdown>
+            {issue!.description}
+          </ReactMarkdown>
+        </Card>
+      </Box>
+
+      <Box>
+        <Button>
+          <MdEdit/>
+          Edit Issue
+          <Link href={`/issues/${id}/edit`}></Link>
+        </Button>
+      </Box>
+    </Grid>
   )
 }
 
