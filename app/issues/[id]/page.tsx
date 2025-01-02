@@ -9,33 +9,36 @@ import IssueDetails from './IssueDetails'
 import { notFound } from 'next/navigation'
 
 interface Props {
-
   params: {
     id: string
   }
 }
 
-const page = async ({params}: {params: Promise<{ id: string }>}) => {
+const page = async ({ params }: Props) => {
+  const id = parseInt(params.id)
 
-  const { id } = await params;
+  if (isNaN(id)) {
+    return notFound() // Ensure it's a valid number
+  }
 
-  const issue  = await prisma.issue.findUnique({
+  const issue = await prisma.issue.findUnique({
     where: {
-      id: parseInt(id),
+      id: id, // Now `id` is a number
     }
   })
 
-  if (!issue) notFound()
+  if (!issue) {
+    return notFound() // If no issue is found, return 404
+  }
 
   return (
-    <Grid columns={{initial:"1", md:"2"}} gap="3">
-
+    <Grid columns={{ initial: "1", md: "2" }} gap="3">
       <Box>
-        <IssueDetails issue={issue}/>
+        <IssueDetails issue={issue} />
       </Box>
 
       <Box>
-        <EditIssueButton issueId={issue.id}/>
+        <EditIssueButton issueId={issue.id} />
       </Box>
     </Grid>
   )
