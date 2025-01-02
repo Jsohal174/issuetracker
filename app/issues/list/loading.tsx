@@ -1,6 +1,6 @@
 import { Table } from '@radix-ui/themes'
 import React from 'react'
-import BadgeComp from '../components/BadgeComp'
+import BadgeComp from '../../components/BadgeComp'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import IssueButton from './IssueButton'
